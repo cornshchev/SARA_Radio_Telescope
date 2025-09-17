@@ -1,0 +1,1278 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: RadioTelescope1420
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: RadioTelescop1420
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: bit_max
+  id: variable
+  parameters:
+    comment: ''
+    value: '4096'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 16.0]
+    rotation: 0
+    state: enabled
+- name: calibration_mode
+  id: variable_qtgui_chooser
+  parameters:
+    comment: ''
+    gui_hint: gui_tab@0:[1,6,3,4]
+    label: Calibration Mode
+    label0: Calibration off
+    label1: Static Calibration
+    label2: Dynamic Calibration
+    label3: ''
+    label4: ''
+    labels: '[]'
+    num_opts: '3'
+    option0: '0'
+    option1: '1'
+    option2: '2'
+    option3: '3'
+    option4: '4'
+    options: '[0, 1, 2]'
+    orient: Qt.QVBoxLayout
+    type: int
+    value: '0'
+    widget: radio_buttons
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [384, 948.0]
+    rotation: 0
+    state: enabled
+- name: db_enabled
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': 'False'
+    gui_hint: gui_tab@0:[10,15,1,1]
+    label: Enable dB
+    'true': 'True'
+    type: int
+    value: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [600, 1288.0]
+    rotation: 0
+    state: enabled
+- name: decimation
+  id: variable
+  parameters:
+    comment: ''
+    value: '4'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 16.0]
+    rotation: 0
+    state: enabled
+- name: freq
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: gui_tab@0:[0,10,1,6]
+    label: freq
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '1418000000'
+    step: '1000'
+    stop: '1445000000'
+    value: source_freq
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [568, 816.0]
+    rotation: 0
+    state: enabled
+- name: freq_corr
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: gui_tab@0:[3,12,1,4]
+    label: Frequence Correction
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '-10'
+    step: '0.1'
+    stop: '10'
+    value: '0'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [728, 1176.0]
+    rotation: 0
+    state: enabled
+- name: integration_mode
+  id: variable_qtgui_chooser
+  parameters:
+    comment: ''
+    gui_hint: gui_tab@0:[2,10,2,2]
+    label: Integration Mode
+    label0: Moving Average
+    label1: IIR Average
+    label2: ''
+    label3: ''
+    label4: ''
+    labels: '[]'
+    num_opts: '2'
+    option0: '0'
+    option1: '1'
+    option2: '2'
+    option3: '3'
+    option4: '4'
+    options: '[0, 1, 2]'
+    orient: Qt.QVBoxLayout
+    type: int
+    value: '0'
+    widget: radio_buttons
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [552, 1100.0]
+    rotation: 0
+    state: enabled
+- name: integration_time
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: gui_tab@0:[2,12,1,4]
+    label: Interation Time(s)
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '1'
+    step: '1'
+    stop: '20'
+    value: '5'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [736, 1048.0]
+    rotation: 0
+    state: enabled
+- name: rf_gain
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: gui_tab@0:[1,10,1,6]
+    label: RF Gain(dB)
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '1'
+    stop: '21'
+    value: '10'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [568, 960.0]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '6000000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [192, 16.0]
+    rotation: 0
+    state: enabled
+- name: source_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: '1420400000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [392, 16.0]
+    rotation: 0
+    state: enabled
+- name: vec_length
+  id: variable
+  parameters:
+    comment: ''
+    value: '1024'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [296, 16.0]
+    rotation: 0
+    state: true
+- name: yroll
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: gui_tab@0:[10,7,1,7]
+    label: roll
+    min_len: '5'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '-1000'
+    step: 0.05*yzoom
+    stop: '1000'
+    value: '0'
+    widget: slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [472, 1280.0]
+    rotation: 0
+    state: true
+- name: yzoom
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: gui_tab@0:[10,0,1,7]
+    label: zoom
+    min_len: '5'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '1'
+    step: '1'
+    stop: '1000'
+    value: '10'
+    widget: slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [360, 1280.0]
+    rotation: 0
+    state: true
+- name: blocks_complex_to_mag_0
+  id: blocks_complex_to_mag
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [728, 280.0]
+    rotation: 0
+    state: enabled
+- name: blocks_complex_to_mag_squared_0
+  id: blocks_complex_to_mag_squared
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: vec_length
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1416, 576.0]
+    rotation: 0
+    state: enabled
+- name: blocks_nlog10_ff_0
+  id: blocks_nlog10_ff
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    k: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: '10'
+    vlen: vec_length
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1816, 672.0]
+    rotation: 0
+    state: enabled
+- name: blocks_selector_0
+  id: blocks_selector
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    enabled: 'True'
+    input_index: db_enabled
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    num_outputs: '1'
+    output_index: '0'
+    showports: 'True'
+    type: float
+    vlen: vec_length
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2040, 536.0]
+    rotation: 0
+    state: enabled
+- name: blocks_stream_to_vector_0_0
+  id: blocks_stream_to_vector
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: vec_length
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [960, 584.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_to_stream_0
+  id: blocks_vector_to_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: vec_length
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2088, 792.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_0
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\n\nclass spectrum_integrator(gr.sync_block):\n    \"\
+      \"\"\n    \u9891\u8C31\u79EF\u5206\u5668\u5757\n    \u8F93\u5165: \u6D6E\u70B9\
+      \u5411\u91CF (\u9891\u8C31\u6570\u636E)\n    \u8F93\u51FA: \u79EF\u5206\u540E\
+      \u7684\u590D\u6570\u5411\u91CF\n    \"\"\"\n    def __init__(self, vec_length=1024,\
+      \ integration_time=1.0, mode=0, samp_rate=1.0):\n        gr.sync_block.__init__(\n\
+      \            self,\n            name=\"Spectrum Integrator\",\n            in_sig=[(np.float32,\
+      \ vec_length)],\n            out_sig=[(np.float32, vec_length)]\n        )\n\
+      \        \n        # \u53C2\u6570\u521D\u59CB\u5316\n        self.vec_length\
+      \ = vec_length\n        self.integration_time = integration_time\n        self.mode\
+      \ = mode\n        self.samp_rate = samp_rate\n        \n        # \u72B6\u6001\
+      \u53D8\u91CF\n        self.reset_state()\n        \n        # \u4E0A\u4E00\u6B21\
+      \u7684\u53C2\u6570\u503C\uFF0C\u7528\u4E8E\u68C0\u6D4B\u53D8\u5316\n       \
+      \ self.last_integration_time = integration_time\n        self.last_mode = mode\n\
+      \        self.last_samp_rate = samp_rate\n        \n    def reset_state(self):\n\
+      \        \"\"\"\u91CD\u7F6E\u79EF\u5206\u5668\u72B6\u6001\"\"\"\n        if\
+      \ self.mode == 0:\n            # \u79FB\u52A8\u5E73\u5747\u6A21\u5F0F\uFF1A\u9700\
+      \u8981\u5B58\u50A8\u591A\u4E2A\u5386\u53F2\u5E27\n            self.n_frames\
+      \ = max(1, int(self.integration_time * self.samp_rate / self.vec_length))\n\
+      \            self.buffer = np.zeros((self.n_frames, self.vec_length), dtype=np.float32)\n\
+      \            self.buffer_index = 0\n            self.buffer_count = 0\n    \
+      \    else:  # IIR\u6A21\u5F0F\n            # IIR\u6EE4\u6CE2\u5668\u7CFB\u6570\
+      \n            alpha = 1.0 / max(1.0, self.integration_time * self.samp_rate\
+      \ / self.vec_length)\n            self.alpha = alpha\n            self.state\
+      \ = np.zeros(self.vec_length, dtype=np.float32)\n        \n    def work(self,\
+      \ input_items, output_items):\n        in0 = input_items[0]\n        out = output_items[0]\n\
+      \        \n        # \u68C0\u67E5\u53C2\u6570\u662F\u5426\u53D1\u751F\u53D8\u5316\
+      \n        if (self.integration_time != self.last_integration_time or \n    \
+      \        self.mode != self.last_mode or \n            self.samp_rate != self.last_samp_rate):\n\
+      \            self.reset_state()\n            self.last_integration_time = self.integration_time\n\
+      \            self.last_mode = self.mode\n            self.last_samp_rate = self.samp_rate\n\
+      \        \n        nframes = len(in0)\n        \n        if self.mode == 0:\n\
+      \            # \u66F4\u9AD8\u6548\u7684\u79FB\u52A8\u5E73\u5747\u5B9E\u73B0\n\
+      \            for i in range(nframes):\n                self.buffer[self.buffer_index]\
+      \ = in0[i]\n                self.buffer_index = (self.buffer_index + 1) % self.n_frames\n\
+      \                \n                if self.buffer_count < self.n_frames:\n \
+      \                   self.buffer_count += 1\n                    # \u589E\u91CF\
+      \u66F4\u65B0\u5E73\u5747\u503C\n                    if self.buffer_count ==\
+      \ 0:\n                        out[i] = in0[i]\n                    else:\n \
+      \                       out[i] = out[i-1] + (in0[i] - out[i-1]) / self.buffer_count\n\
+      \                else:\n                    # \u7F13\u51B2\u533A\u6EE1\uFF0C\
+      \u4F7F\u7528\u6ED1\u52A8\u7A97\u53E3\u5E73\u5747\n                    out[i]\
+      \ = out[i-1] + (in0[i] - self.buffer[self.buffer_index]) / self.n_frames\n \
+      \       else:  # IIR\u6A21\u5F0F\n            # \u4F7F\u7528NumPy\u7684\u5411\
+      \u91CF\u5316\u64CD\u4F5C\n            alpha = self.alpha\n            one_minus_alpha\
+      \ = 1.0 - alpha\n            \n            # \u6279\u91CF\u5904\u7406\u6240\u6709\
+      \u5E27\n            for i in range(nframes):\n                out[i] = alpha\
+      \ * in0[i] + one_minus_alpha * (self.state if i == 0 else out[i-1])\n      \
+      \      \n            self.state = out[-1]  # \u53EA\u66F4\u65B0\u4E00\u6B21\u72B6\
+      \u6001\n        \n        return nframes\n\n    def set_integration_time(self,\
+      \ integration_time):\n        \"\"\"\u8BBE\u7F6E\u79EF\u5206\u65F6\u95F4\"\"\
+      \"\n        self.integration_time = integration_time\n        \n    def set_mode(self,\
+      \ mode):\n        \"\"\"\u8BBE\u7F6E\u79EF\u5206\u6A21\u5F0F\"\"\"\n       \
+      \ self.mode = mode\n        \n    def set_samp_rate(self, samp_rate):\n    \
+      \    \"\"\"\u8BBE\u7F6E\u91C7\u6837\u7387\"\"\"\n        self.samp_rate = samp_rate"
+    affinity: ''
+    alias: ''
+    comment: ''
+    integration_time: integration_time
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    mode: integration_mode
+    samp_rate: samp_rate/4
+    vec_length: vec_length
+  states:
+    _io_cache: "('Spectrum Integrator', 'spectrum_integrator', [('vec_length', '1024'),\
+      \ ('integration_time', '1.0'), ('mode', '0'), ('samp_rate', '1.0')], [('0',\
+      \ 'float', 1024)], [('0', 'float', 1024)], '\\n    \u9891\u8C31\u79EF\u5206\u5668\
+      \u5757\\n    \u8F93\u5165: \u6D6E\u70B9\u5411\u91CF (\u9891\u8C31\u6570\u636E\
+      )\\n    \u8F93\u51FA: \u79EF\u5206\u540E\u7684\u590D\u6570\u5411\u91CF\\n  \
+      \  ', ['integration_time', 'mode', 'samp_rate', 'vec_length'])"
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1632, 552.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_1
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      import matplotlib.pyplot as plt\nfrom PyQt5.QtWidgets import QFileDialog\nfrom\
+      \ gnuradio import gr\nimport os\n\nclass save_spectrum_image(gr.sync_block):\n\
+      \    \"\"\"\n    Block to save spectrum image when triggered by a Qt GUI Push\
+      \ Button.\n    \"\"\"\n    def __init__(self, vec_length=1024, x_axis_start_value=0,\
+      \ x_axis_step_value=1,\n                 x_axis_label=\"Frequency\", y_axis_label=\"\
+      Magnitude\",\n                 x_axis_units=\"Hz\", y_axis_units=\"dB\",\n \
+      \                y_min=-120, y_max=0):\n        gr.sync_block.__init__(\n  \
+      \          self,\n            name=\"Save Spectrum Image\",\n            in_sig=[np.float32],\n\
+      \            out_sig=None\n        )\n        \n        self.vec_length = vec_length\n\
+      \        self.x_axis_start_value = x_axis_start_value\n        self.x_axis_step_value\
+      \ = x_axis_step_value\n        self.x_axis_label = x_axis_label\n        self.y_axis_label\
+      \ = y_axis_label\n        self.x_axis_units = x_axis_units\n        self.y_axis_units\
+      \ = y_axis_units\n        self.y_min = y_min\n        self.y_max = y_max\n \
+      \       \n        self.message_port_register_in(gr.pmt.intern(\"save\"))\n \
+      \       self.set_msg_handler(gr.pmt.intern(\"save\"), self.handle_save_msg)\n\
+      \        \n        self.data_buffer = np.zeros(vec_length)\n        self.buffer_ready\
+      \ = False\n        \n    def work(self, input_items, output_items):\n      \
+      \  in_data = input_items[0]\n        \n        # Only store the most recent\
+      \ data\n        if len(in_data) >= self.vec_length:\n            self.data_buffer\
+      \ = in_data[-self.vec_length:]\n            self.buffer_ready = True\n     \
+      \   elif len(in_data) > 0:\n            # Handle case where we get partial data\
+      \ (shouldn't happen with sync block)\n            self.data_buffer = np.roll(self.data_buffer,\
+      \ -len(in_data))\n            self.data_buffer[-len(in_data):] = in_data\n \
+      \           self.buffer_ready = True\n            \n        return len(input_items[0])\n\
+      \    \n    def handle_save_msg(self, msg):\n        if not self.buffer_ready:\n\
+      \            print(\"No data available to save yet.\")\n            return\n\
+      \            \n        # Get save path from user\n        options = QFileDialog.Options()\n\
+      \        file_path, _ = QFileDialog.getSaveFileName(\n            None,\n  \
+      \          \"Save Spectrum Image\",\n            \"\",\n            \"PNG Files\
+      \ (*.png);;All Files (*)\",\n            options=options\n        )\n      \
+      \  \n        if not file_path:\n            return  # User cancelled\n     \
+      \       \n        # Add .png extension if not present\n        if not file_path.lower().endswith('.png'):\n\
+      \            file_path += '.png'\n            \n        # Generate x-axis values\n\
+      \        x_values = np.arange(\n            self.x_axis_start_value,\n     \
+      \       self.x_axis_start_value + self.vec_length * self.x_axis_step_value,\n\
+      \            self.x_axis_step_value\n        )\n        \n        # Create and\
+      \ save plot\n        plt.figure(figsize=(10, 6))\n        plt.plot(x_values,\
+      \ self.data_buffer)\n        plt.xlabel(f\"{self.x_axis_label} ({self.x_axis_units})\"\
+      )\n        plt.ylabel(f\"{self.y_axis_label} ({self.y_axis_units})\")\n    \
+      \    plt.title(\"Spectrum\")\n        plt.grid(True)\n        \n        # Set\
+      \ axis limits if specified\n        if self.y_min is not None:\n           \
+      \ plt.ylim(bottom=self.y_min)\n        if self.y_max is not None:\n        \
+      \    plt.ylim(top=self.y_max)\n            \n        plt.tight_layout()\n  \
+      \      plt.savefig(file_path, dpi=300)\n        plt.close()\n        \n    \
+      \    print(f\"Spectrum image saved to: {file_path}\")"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vec_length: vec_length
+    x_axis_label: '"Frequency"'
+    x_axis_start_value: (freq-samp_rate/decimation/2)/1e6
+    x_axis_step_value: (samp_rate/decimation/vec_length)/1e6
+    x_axis_units: '"MHz"'
+    y_axis_label: '"Average Signal"'
+    y_axis_units: '''dB'''
+    y_max: yroll+1000/yzoom
+    y_min: yroll-1000/yzoom
+  states:
+    _io_cache: ('Save Spectrum Image', 'save_spectrum_image', [('vec_length', '1024'),
+      ('x_axis_start_value', '0'), ('x_axis_step_value', '1'), ('x_axis_label', "'Frequency'"),
+      ('y_axis_label', "'Magnitude'"), ('x_axis_units', "'Hz'"), ('y_axis_units',
+      "'dB'"), ('y_min', '-120'), ('y_max', '0')], [('0', 'float', 1), ('save', 'message',
+      1)], [], '\n    Block to save spectrum image when triggered by a Qt GUI Push
+      Button.\n    ', ['vec_length', 'x_axis_label', 'x_axis_start_value', 'x_axis_step_value',
+      'x_axis_units', 'y_axis_label', 'y_axis_units', 'y_max', 'y_min'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2264, 732.0]
+    rotation: 0
+    state: enabled
+- name: fft_vxx_0
+  id: fft_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    fft_size: vec_length
+    forward: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nthreads: '4'
+    shift: 'True'
+    type: complex
+    window: window.rectangular(vec_length)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1136, 544.0]
+    rotation: 0
+    state: enabled
+- name: gui_tab
+  id: qtgui_tab_widget
+  parameters:
+    alias: ''
+    comment: ''
+    gui_hint: ''
+    label0: Spectrum
+    label1: Record
+    label10: Tab 10
+    label11: Tab 11
+    label12: Tab 12
+    label13: Tab 13
+    label14: Tab 14
+    label15: Tab 15
+    label16: Tab 16
+    label17: Tab 17
+    label18: Tab 18
+    label19: Tab 19
+    label2: Calibration
+    label3: Tab 3
+    label4: Tab 4
+    label5: Tab 5
+    label6: Tab 6
+    label7: Tab 7
+    label8: Tab 8
+    label9: Tab 9
+    num_tabs: '3'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 688.0]
+    rotation: 0
+    state: true
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import numpy
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1024, 16.0]
+    rotation: 0
+    state: enabled
+- name: osmosdr_source_0
+  id: osmosdr_source
+  parameters:
+    affinity: ''
+    alias: ''
+    ant0: ''
+    ant1: ''
+    ant10: ''
+    ant11: ''
+    ant12: ''
+    ant13: ''
+    ant14: ''
+    ant15: ''
+    ant16: ''
+    ant17: ''
+    ant18: ''
+    ant19: ''
+    ant2: ''
+    ant20: ''
+    ant21: ''
+    ant22: ''
+    ant23: ''
+    ant24: ''
+    ant25: ''
+    ant26: ''
+    ant27: ''
+    ant28: ''
+    ant29: ''
+    ant3: ''
+    ant30: ''
+    ant31: ''
+    ant4: ''
+    ant5: ''
+    ant6: ''
+    ant7: ''
+    ant8: ''
+    ant9: ''
+    args: '"airspy=0"'
+    bb_gain0: '0'
+    bb_gain1: '20'
+    bb_gain10: '20'
+    bb_gain11: '20'
+    bb_gain12: '20'
+    bb_gain13: '20'
+    bb_gain14: '20'
+    bb_gain15: '20'
+    bb_gain16: '20'
+    bb_gain17: '20'
+    bb_gain18: '20'
+    bb_gain19: '20'
+    bb_gain2: '20'
+    bb_gain20: '20'
+    bb_gain21: '20'
+    bb_gain22: '20'
+    bb_gain23: '20'
+    bb_gain24: '20'
+    bb_gain25: '20'
+    bb_gain26: '20'
+    bb_gain27: '20'
+    bb_gain28: '20'
+    bb_gain29: '20'
+    bb_gain3: '20'
+    bb_gain30: '20'
+    bb_gain31: '20'
+    bb_gain4: '20'
+    bb_gain5: '20'
+    bb_gain6: '20'
+    bb_gain7: '20'
+    bb_gain8: '20'
+    bb_gain9: '20'
+    bw0: '0'
+    bw1: '0'
+    bw10: '0'
+    bw11: '0'
+    bw12: '0'
+    bw13: '0'
+    bw14: '0'
+    bw15: '0'
+    bw16: '0'
+    bw17: '0'
+    bw18: '0'
+    bw19: '0'
+    bw2: '0'
+    bw20: '0'
+    bw21: '0'
+    bw22: '0'
+    bw23: '0'
+    bw24: '0'
+    bw25: '0'
+    bw26: '0'
+    bw27: '0'
+    bw28: '0'
+    bw29: '0'
+    bw3: '0'
+    bw30: '0'
+    bw31: '0'
+    bw4: '0'
+    bw5: '0'
+    bw6: '0'
+    bw7: '0'
+    bw8: '0'
+    bw9: '0'
+    clock_source0: ''
+    clock_source1: ''
+    clock_source2: ''
+    clock_source3: ''
+    clock_source4: ''
+    clock_source5: ''
+    clock_source6: ''
+    clock_source7: ''
+    comment: ''
+    corr0: freq_corr
+    corr1: '0'
+    corr10: '0'
+    corr11: '0'
+    corr12: '0'
+    corr13: '0'
+    corr14: '0'
+    corr15: '0'
+    corr16: '0'
+    corr17: '0'
+    corr18: '0'
+    corr19: '0'
+    corr2: '0'
+    corr20: '0'
+    corr21: '0'
+    corr22: '0'
+    corr23: '0'
+    corr24: '0'
+    corr25: '0'
+    corr26: '0'
+    corr27: '0'
+    corr28: '0'
+    corr29: '0'
+    corr3: '0'
+    corr30: '0'
+    corr31: '0'
+    corr4: '0'
+    corr5: '0'
+    corr6: '0'
+    corr7: '0'
+    corr8: '0'
+    corr9: '0'
+    dc_offset_mode0: '0'
+    dc_offset_mode1: '0'
+    dc_offset_mode10: '0'
+    dc_offset_mode11: '0'
+    dc_offset_mode12: '0'
+    dc_offset_mode13: '0'
+    dc_offset_mode14: '0'
+    dc_offset_mode15: '0'
+    dc_offset_mode16: '0'
+    dc_offset_mode17: '0'
+    dc_offset_mode18: '0'
+    dc_offset_mode19: '0'
+    dc_offset_mode2: '0'
+    dc_offset_mode20: '0'
+    dc_offset_mode21: '0'
+    dc_offset_mode22: '0'
+    dc_offset_mode23: '0'
+    dc_offset_mode24: '0'
+    dc_offset_mode25: '0'
+    dc_offset_mode26: '0'
+    dc_offset_mode27: '0'
+    dc_offset_mode28: '0'
+    dc_offset_mode29: '0'
+    dc_offset_mode3: '0'
+    dc_offset_mode30: '0'
+    dc_offset_mode31: '0'
+    dc_offset_mode4: '0'
+    dc_offset_mode5: '0'
+    dc_offset_mode6: '0'
+    dc_offset_mode7: '0'
+    dc_offset_mode8: '0'
+    dc_offset_mode9: '0'
+    freq0: freq
+    freq1: 100e6
+    freq10: 100e6
+    freq11: 100e6
+    freq12: 100e6
+    freq13: 100e6
+    freq14: 100e6
+    freq15: 100e6
+    freq16: 100e6
+    freq17: 100e6
+    freq18: 100e6
+    freq19: 100e6
+    freq2: 100e6
+    freq20: 100e6
+    freq21: 100e6
+    freq22: 100e6
+    freq23: 100e6
+    freq24: 100e6
+    freq25: 100e6
+    freq26: 100e6
+    freq27: 100e6
+    freq28: 100e6
+    freq29: 100e6
+    freq3: 100e6
+    freq30: 100e6
+    freq31: 100e6
+    freq4: 100e6
+    freq5: 100e6
+    freq6: 100e6
+    freq7: 100e6
+    freq8: 100e6
+    freq9: 100e6
+    gain0: rf_gain
+    gain1: '10'
+    gain10: '10'
+    gain11: '10'
+    gain12: '10'
+    gain13: '10'
+    gain14: '10'
+    gain15: '10'
+    gain16: '10'
+    gain17: '10'
+    gain18: '10'
+    gain19: '10'
+    gain2: '10'
+    gain20: '10'
+    gain21: '10'
+    gain22: '10'
+    gain23: '10'
+    gain24: '10'
+    gain25: '10'
+    gain26: '10'
+    gain27: '10'
+    gain28: '10'
+    gain29: '10'
+    gain3: '10'
+    gain30: '10'
+    gain31: '10'
+    gain4: '10'
+    gain5: '10'
+    gain6: '10'
+    gain7: '10'
+    gain8: '10'
+    gain9: '10'
+    gain_mode0: 'False'
+    gain_mode1: 'False'
+    gain_mode10: 'False'
+    gain_mode11: 'False'
+    gain_mode12: 'False'
+    gain_mode13: 'False'
+    gain_mode14: 'False'
+    gain_mode15: 'False'
+    gain_mode16: 'False'
+    gain_mode17: 'False'
+    gain_mode18: 'False'
+    gain_mode19: 'False'
+    gain_mode2: 'False'
+    gain_mode20: 'False'
+    gain_mode21: 'False'
+    gain_mode22: 'False'
+    gain_mode23: 'False'
+    gain_mode24: 'False'
+    gain_mode25: 'False'
+    gain_mode26: 'False'
+    gain_mode27: 'False'
+    gain_mode28: 'False'
+    gain_mode29: 'False'
+    gain_mode3: 'False'
+    gain_mode30: 'False'
+    gain_mode31: 'False'
+    gain_mode4: 'False'
+    gain_mode5: 'False'
+    gain_mode6: 'False'
+    gain_mode7: 'False'
+    gain_mode8: 'False'
+    gain_mode9: 'False'
+    if_gain0: '0'
+    if_gain1: '20'
+    if_gain10: '20'
+    if_gain11: '20'
+    if_gain12: '20'
+    if_gain13: '20'
+    if_gain14: '20'
+    if_gain15: '20'
+    if_gain16: '20'
+    if_gain17: '20'
+    if_gain18: '20'
+    if_gain19: '20'
+    if_gain2: '20'
+    if_gain20: '20'
+    if_gain21: '20'
+    if_gain22: '20'
+    if_gain23: '20'
+    if_gain24: '20'
+    if_gain25: '20'
+    if_gain26: '20'
+    if_gain27: '20'
+    if_gain28: '20'
+    if_gain29: '20'
+    if_gain3: '20'
+    if_gain30: '20'
+    if_gain31: '20'
+    if_gain4: '20'
+    if_gain5: '20'
+    if_gain6: '20'
+    if_gain7: '20'
+    if_gain8: '20'
+    if_gain9: '20'
+    iq_balance_mode0: '0'
+    iq_balance_mode1: '0'
+    iq_balance_mode10: '0'
+    iq_balance_mode11: '0'
+    iq_balance_mode12: '0'
+    iq_balance_mode13: '0'
+    iq_balance_mode14: '0'
+    iq_balance_mode15: '0'
+    iq_balance_mode16: '0'
+    iq_balance_mode17: '0'
+    iq_balance_mode18: '0'
+    iq_balance_mode19: '0'
+    iq_balance_mode2: '0'
+    iq_balance_mode20: '0'
+    iq_balance_mode21: '0'
+    iq_balance_mode22: '0'
+    iq_balance_mode23: '0'
+    iq_balance_mode24: '0'
+    iq_balance_mode25: '0'
+    iq_balance_mode26: '0'
+    iq_balance_mode27: '0'
+    iq_balance_mode28: '0'
+    iq_balance_mode29: '0'
+    iq_balance_mode3: '0'
+    iq_balance_mode30: '0'
+    iq_balance_mode31: '0'
+    iq_balance_mode4: '0'
+    iq_balance_mode5: '0'
+    iq_balance_mode6: '0'
+    iq_balance_mode7: '0'
+    iq_balance_mode8: '0'
+    iq_balance_mode9: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nchan: '1'
+    num_mboards: '1'
+    sample_rate: samp_rate
+    sync: sync
+    time_source0: ''
+    time_source1: ''
+    time_source2: ''
+    time_source3: ''
+    time_source4: ''
+    time_source5: ''
+    time_source6: ''
+    time_source7: ''
+    type: fc32
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 324.0]
+    rotation: 0
+    state: enabled
+- name: pfb_decimator_ccf_0
+  id: pfb_decimator_ccf
+  parameters:
+    affinity: ''
+    alias: ''
+    atten: '40'
+    channel: '0'
+    comment: ''
+    decim: decimation
+    fft_filts: 'False'
+    fft_rot: 'False'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_delay: '0'
+    taps: '[-1.6253957381987094e-18,-0.0003171409189235419,0.0005596519913524389,-2.0325000178946184e-18,-0.0013553404714912176,0.001955647487193346,-5.3988564840815144e-18,-0.0037004761397838593,0.004910294432193041,-1.0851606266612696e-17,-0.008197451941668987,0.010367341339588165,-7.150374208034986e-17,-0.016049886122345924,0.019715232774615288,-2.7224212988098325e-17,-0.0292399600148201,0.03543321043252945,-3.641610038077746e-17,-0.05211251974105835,0.06365709006786346,-4.4479314716879014e-17,-0.0990009754896164,0.1286739856004715,-5.000909321241236e-17,-0.2709931433200836,0.5489985346794128,1.333391785621643,0.5489985346794128,-0.2709931433200836,-5.000909321241236e-17,0.1286739856004715,-0.0990009754896164,-4.4479314716879014e-17,0.06365709006786346,-0.05211251974105835,-3.641610038077746e-17,0.03543321043252945,-0.0292399600148201,-2.7224212988098325e-17,0.019715232774615288,-0.016049886122345924,-7.150374208034986e-17,0.010367341339588165,-0.008197451941668987,-1.0851606266612696e-17,0.004910294432193041,-0.0037004761397838593,-5.3988564840815144e-18,0.001955647487193346,-0.0013553404714912176,-2.0325000178946184e-18,0.0005596519913524389,-0.0003171409189235419,-1.6253957381987094e-18]'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [728, 552.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_histogram_sink_x_0
+  id: qtgui_histogram_sink_x
+  parameters:
+    accum: 'False'
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'True'
+    axislabels: 'True'
+    bins: bit_max
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'False'
+    gui_hint: gui_tab@0:[0,0,4,4]
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'False'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"Signal Histogram"'
+    nconnections: '1'
+    size: int(samp_rate/8)
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    type: float
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '0.5'
+    xmin: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [960, 220.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_vector_sink_f_0_0_1_0
+  id: qtgui_vector_sink_f
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '0.05'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'True'
+    gui_hint: gui_tab@0:[11,0,10,16]
+    label1: Spectrum
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"Average Spectrum"'
+    nconnections: '1'
+    ref_level: '0'
+    showports: 'False'
+    update_time: '0.10'
+    vlen: vec_length
+    width1: '2'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    x_axis_label: '"Frequency"'
+    x_start: (freq-samp_rate/decimation/2)/1e6
+    x_step: (samp_rate/decimation/vec_length)/1e6
+    x_units: '"MHz"'
+    y_axis_label: '"Average Signal"'
+    y_units: '"Amp/dB"'
+    ymax: yroll+1000/yzoom
+    ymin: yroll-1000/yzoom
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2256, 524.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_waterfall_sink_x_0
+  id: qtgui_waterfall_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    axislabels: 'True'
+    bw: samp_rate
+    color1: '0'
+    color10: '0'
+    color2: '0'
+    color3: '0'
+    color4: '0'
+    color5: '0'
+    color6: '0'
+    color7: '0'
+    color8: '0'
+    color9: '0'
+    comment: ''
+    fc: freq
+    fftsize: '4096'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: gui_tab@0:[4,0,6,16]
+    int_max: '10'
+    int_min: '-140'
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"Waterfall Spectrum"'
+    nconnections: '1'
+    showports: 'False'
+    type: complex
+    update_time: '0.10'
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [728, 384.0]
+    rotation: 0
+    state: enabled
+- name: spectrum_save
+  id: variable_qtgui_msg_push_button
+  parameters:
+    comment: ''
+    gui_hint: gui_tab@0:[0,6,1,4]
+    label: Save Spectum
+    msgName: pressed
+    relBackgroundColor: default
+    relFontColor: default
+    type: int
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1896, 848.0]
+    rotation: 0
+    state: enabled
+
+connections:
+- [blocks_complex_to_mag_0, '0', qtgui_histogram_sink_x_0, '0']
+- [blocks_complex_to_mag_squared_0, '0', epy_block_0, '0']
+- [blocks_nlog10_ff_0, '0', blocks_selector_0, '1']
+- [blocks_selector_0, '0', blocks_vector_to_stream_0, '0']
+- [blocks_selector_0, '0', qtgui_vector_sink_f_0_0_1_0, '0']
+- [blocks_stream_to_vector_0_0, '0', fft_vxx_0, '0']
+- [blocks_vector_to_stream_0, '0', epy_block_1, '0']
+- [epy_block_0, '0', blocks_nlog10_ff_0, '0']
+- [epy_block_0, '0', blocks_selector_0, '0']
+- [fft_vxx_0, '0', blocks_complex_to_mag_squared_0, '0']
+- [osmosdr_source_0, '0', blocks_complex_to_mag_0, '0']
+- [osmosdr_source_0, '0', pfb_decimator_ccf_0, '0']
+- [osmosdr_source_0, '0', qtgui_waterfall_sink_x_0, '0']
+- [pfb_decimator_ccf_0, '0', blocks_stream_to_vector_0_0, '0']
+- [spectrum_save, pressed, epy_block_1, save]
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.11.0
