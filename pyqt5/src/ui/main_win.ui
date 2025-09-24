@@ -11,11 +11,14 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>SARA 射电望远镜</string>
+   <string>东南大学 SARA 射电望远镜</string>
   </property>
   <property name="windowIcon">
    <iconset>
     <normaloff>../../../../../.designer/backup/logo.jpg</normaloff>../../../../../.designer/backup/logo.jpg</iconset>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
   </property>
   <property name="styleSheet">
    <string notr="true">*{  
@@ -125,7 +128,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QSlider" name="horizontalSlider">
+                 <widget class="QSlider" name="slider_integration">
                   <property name="minimum">
                    <number>1</number>
                   </property>
@@ -137,6 +140,19 @@
                   </property>
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinbox_integration">
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
+                  <property name="maximum">
+                   <number>20</number>
+                  </property>
+                  <property name="value">
+                   <number>5</number>
                   </property>
                  </widget>
                 </item>
@@ -388,12 +404,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>707</x>
-     <y>151</y>
+     <x>942</x>
+     <y>161</y>
     </hint>
     <hint type="destinationlabel">
-     <x>806</x>
-     <y>165</y>
+     <x>1025</x>
+     <y>166</y>
     </hint>
    </hints>
   </connection>
@@ -404,12 +420,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>616</x>
-     <y>116</y>
+     <x>923</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
-     <x>818</x>
-     <y>120</y>
+     <x>1025</x>
+     <y>114</y>
     </hint>
    </hints>
   </connection>
@@ -420,12 +436,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>831</x>
+     <x>1025</x>
      <y>166</y>
     </hint>
     <hint type="destinationlabel">
-     <x>676</x>
-     <y>156</y>
+     <x>942</x>
+     <y>161</y>
     </hint>
    </hints>
   </connection>
@@ -436,12 +452,44 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>825</x>
-     <y>116</y>
+     <x>1025</x>
+     <y>114</y>
     </hint>
     <hint type="destinationlabel">
-     <x>735</x>
-     <y>113</y>
+     <x>923</x>
+     <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slider_integration</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinbox_integration</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>586</x>
+     <y>127</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>635</x>
+     <y>126</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinbox_integration</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slider_integration</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>644</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>503</x>
+     <y>126</y>
     </hint>
    </hints>
   </connection>

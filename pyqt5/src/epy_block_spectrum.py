@@ -19,7 +19,7 @@ class SpectrumDisplayBlock(gr.sync_block, QtCore.QObject):
     # 定义信号
     update_display_signal = QtCore.pyqtSignal(np.ndarray)
     
-    def __init__(self, vec_length=1024, parent=None):
+    def __init__(self, vec_length=1024, freq = 1420400000, samp_rate = 6000000000, parent=None):
         # 分别调用两个父类的初始化
         gr.sync_block.__init__(
             self,
@@ -30,9 +30,15 @@ class SpectrumDisplayBlock(gr.sync_block, QtCore.QObject):
         QtCore.QObject.__init__(self)
         
         self.vec_length = vec_length
+        self.freq = freq
+        self.samp_rate = samp_rate
         self.parent = parent
         self.data_queue = []
         self.max_queue_size = 10
+
+        self.freq_axis = None  # 预分配频率轴
+        self.update_freq_axis()  # 初始化频率轴
+        self.frame_count = 0  # 帧计数器
         
         # 连接信号到槽
         self.update_display_signal.connect(self.update_display, QtCore.Qt.QueuedConnection)
@@ -45,13 +51,14 @@ class SpectrumDisplayBlock(gr.sync_block, QtCore.QObject):
         if self.parent and hasattr(self.parent, 'add_spectrum_widget'):
             # 创建PyQtGraph绘图窗口
             self.plot_widget = pg.PlotWidget()
-            self.plot_widget.setWindowTitle("Spectrum Display")
-            self.plot_widget.setLabel('left', 'Amplitude', 'dB')
-            self.plot_widget.setLabel('bottom', 'Frequency', 'MHz')
+            self.plot_widget.setWindowTitle("平均功率谱")
+            self.plot_widget.setBackground('#f0f0f0')
+            self.plot_widget.setLabel('left', '功率', 'dB')
+            self.plot_widget.setLabel('bottom', '频率', 'MHz')
             self.plot_widget.showGrid(True, True)
             
             # 创建曲线
-            self.curve = self.plot_widget.plot(pen='y')
+            self.curve = self.plot_widget.plot(pen='b')
             
             # 添加到父窗口
             self.parent.add_spectrum_widget(self.plot_widget)
@@ -64,14 +71,14 @@ class SpectrumDisplayBlock(gr.sync_block, QtCore.QObject):
             # 获取最新的频谱数据
             spectrum_data = in0[0]
             
-            # 将数据添加到队列
-            self.data_queue.append(spectrum_data.copy())
-            if len(self.data_queue) > self.max_queue_size:
-                self.data_queue.pop(0)
-            
-            # 发射信号更新显示
             if hasattr(self, 'curve') and self.curve:
-                self.update_display_signal.emit(spectrum_data.copy())
+                # 只在必要时发射信号，比如每N帧发射一次
+                if self.frame_count % 10 == 0:  # 每5帧更新一次显示
+                    self.update_display_signal.emit(spectrum_data.copy())
+            self.frame_count += 1            
+            # # 发射信号更新显示
+            # if hasattr(self, 'curve') and self.curve:
+            #     self.update_display_signal.emit(spectrum_data.copy())
         
         return len(input_items[0])
     
@@ -80,7 +87,17 @@ class SpectrumDisplayBlock(gr.sync_block, QtCore.QObject):
         """更新显示（在主线程中执行）"""
         try:
             if hasattr(self, 'curve') and self.curve:
-                x_data = np.arange(len(data))
-                self.curve.setData(x_data, data)
+                # 使用预分配的频率轴
+                self.curve.setData(self.freq_axis, data)
         except Exception as e:
             print(f"Error updating display: {e}")
+
+
+    def update_freq_axis(self):
+        """更新频率轴，只在频率参数变化时调用"""
+        n = self.vec_length
+        self.freq_axis = np.linspace(
+            (self.freq - self.samp_rate/2) / 1e6,
+            (self.freq + self.samp_rate/2) / 1e6,
+            n
+        )
