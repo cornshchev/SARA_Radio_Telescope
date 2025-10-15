@@ -23,8 +23,10 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio.filter import pfb
-import epy_block_integration as spectrum_integration_block  # embedded python block
-import epy_block_spectrum as spectrum_display_block  # embedded python block
+# import pyqt5.epy_modules.epy_block_integration as spectrum_integration_block  # embedded python block
+# import pyqt5.epy_modules.epy_block_spectrum as spectrum_display_block  # embedded python block
+from grc_modules import epy_block_integration as spectrum_integration_block
+from grc_modules import epy_block_spectrum as spectrum_display_block
 import numpy
 import osmosdr
 import time
@@ -34,6 +36,9 @@ import os
 from pathlib import Path
 from PyQt5.QtCore import QFile
 import numpy as np
+
+import qdarkstyle
+from qt_material import apply_stylesheet
 
 
 
@@ -144,7 +149,7 @@ class RadioTelescope1420(gr.top_block):
         ##################################################
         self.source_freq = source_freq = 1420400000
         self.vec_length = vec_length = 1024
-        self.samp_rate = samp_rate = 6000000
+        self.samp_rate = samp_rate = 3000000
         self.rf_gain = rf_gain = 10
         self.integration_time = integration_time = 5
         self.integration_mode = integration_mode = 0
@@ -212,7 +217,7 @@ class RadioTelescope1420(gr.top_block):
         
 
         # 多相抽样滤波器
-        file_path = os.fspath(Path(__file__).resolve().parent / "ph_decimator_taps.csv")
+        file_path = os.fspath(Path(__file__).resolve().parent / "grc_modules" / "ph_decimator_taps.csv")
         taps = np.loadtxt(file_path, delimiter=',')
         self.pfb_decimator_ccf_0 = pfb.decimator_ccf(
             decimation,
@@ -379,6 +384,15 @@ class RadioTelescope1420(gr.top_block):
 
 def main(top_block_cls=RadioTelescope1420, options=None):
     qapp = QtWidgets.QApplication(sys.argv)
+
+    # setup qdarkstylesheet
+    light_stylesheet = qdarkstyle.load_stylesheet(qt_api='pyqt5', palette=qdarkstyle.LightPalette)
+    qapp.setStyleSheet(light_stylesheet)
+
+    # setup stylesheet
+    # apply_stylesheet(qapp, theme='light_cyan.xml')
+
+
 
     # 创建UI
     ui = RadioTelescopeUI()

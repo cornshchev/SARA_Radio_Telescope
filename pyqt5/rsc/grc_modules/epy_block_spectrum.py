@@ -11,7 +11,7 @@ from gnuradio import gr
 import pyqtgraph as pg
 from PyQt5 import QtCore, QtWidgets
 
-class SpectrumDisplayBlock(gr.sync_block, QtCore.QObject):
+class spectrum_display(gr.sync_block, QtCore.QObject):
     """
     自定义Python Block，用于接收频谱数据并使用PyQtGraph显示
     """
@@ -19,7 +19,7 @@ class SpectrumDisplayBlock(gr.sync_block, QtCore.QObject):
     # 定义信号
     update_display_signal = QtCore.pyqtSignal(np.ndarray)
     
-    def __init__(self, vec_length=1024, freq = 1420400000, samp_rate = 6000000000, parent=None):
+    def __init__(self, vec_length=1024, freq = 1420400000, samp_rate = 6000000000, cat_ratio = 1.0, parent=None):
         # 分别调用两个父类的初始化
         gr.sync_block.__init__(
             self,
@@ -32,9 +32,11 @@ class SpectrumDisplayBlock(gr.sync_block, QtCore.QObject):
         self.vec_length = vec_length
         self.freq = freq
         self.samp_rate = samp_rate
+        self.cat_ratio = min(1, abs(cat_ratio))
         self.parent = parent
-        self.data_queue = []
-        self.max_queue_size = 10
+
+        # self.data_queue = []
+        # self.max_queue_size = 10
 
         self.freq_axis = None  # 预分配频率轴
         self.update_freq_axis()  # 初始化频率轴
@@ -58,7 +60,7 @@ class SpectrumDisplayBlock(gr.sync_block, QtCore.QObject):
             self.plot_widget.showGrid(True, True)
             
             # 创建曲线
-            self.curve = self.plot_widget.plot(pen='b')
+            self.curve = self.plot_widget.plot(pen={'color': 'b', 'width': 2})
             
             # 添加到父窗口
             self.parent.add_spectrum_widget(self.plot_widget)
@@ -69,16 +71,13 @@ class SpectrumDisplayBlock(gr.sync_block, QtCore.QObject):
         
         if len(in0) > 0:
             # 获取最新的频谱数据
-            spectrum_data = in0[0]
+            spectrum_data = in0[0][self.spectrum_indices]
             
             if hasattr(self, 'curve') and self.curve:
                 # 只在必要时发射信号，比如每N帧发射一次
                 if self.frame_count % 10 == 0:  # 每5帧更新一次显示
                     self.update_display_signal.emit(spectrum_data.copy())
-            self.frame_count += 1            
-            # # 发射信号更新显示
-            # if hasattr(self, 'curve') and self.curve:
-            #     self.update_display_signal.emit(spectrum_data.copy())
+            self.frame_count += 1
         
         return len(input_items[0])
     
@@ -90,14 +89,19 @@ class SpectrumDisplayBlock(gr.sync_block, QtCore.QObject):
                 # 使用预分配的频率轴
                 self.curve.setData(self.freq_axis, data)
         except Exception as e:
-            print(f"Error updating display: {e}")
+            print(f"epy_block_spectrum.py更新频谱数据错误: {e}")
 
 
     def update_freq_axis(self):
         """更新频率轴，只在频率参数变化时调用"""
         n = self.vec_length
+        # 计算截取索引
+        start_idx = int((0.5 - self.cat_ratio/2) * n)
+        end_idx = int((0.5 + self.cat_ratio/2) * n)
+        self.spectrum_indices = slice(start_idx, end_idx)
+        # 计算频率轴
         self.freq_axis = np.linspace(
-            (self.freq - self.samp_rate/2) / 1e6,
-            (self.freq + self.samp_rate/2) / 1e6,
-            n
+            (self.freq - self.samp_rate*self.cat_ratio/2) / 1e6,
+            (self.freq + self.samp_rate*self.cat_ratio/2) / 1e6,
+            end_idx - start_idx
         )

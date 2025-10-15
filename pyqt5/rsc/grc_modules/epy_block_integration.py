@@ -7,6 +7,7 @@ be the parameters. All of them are required to have default values!
 """
 
 import numpy as np
+from collections import deque
 from gnuradio import gr
 
 class spectrum_integrator(gr.sync_block):
@@ -40,10 +41,10 @@ class spectrum_integrator(gr.sync_block):
     def reset_state(self):
         """重置积分器状态"""
         if self.mode == 0:
-            # 移动平均模式：需要存储多个历史帧
+            # 移动平均模式：使用队列存储历史帧
             self.n_frames = max(1, int(self.integration_time * self.samp_rate / self.vec_length))
-            self.buffer = np.zeros((self.n_frames, self.vec_length), dtype=np.float32)
-            self.buffer_index = 0
+            self.buffer_queue = deque(maxlen=self.n_frames)
+            self.current_sum = np.zeros(self.vec_length, dtype=np.float32)
             self.buffer_count = 0
         else:  # IIR模式
             # IIR滤波器系数
@@ -67,21 +68,24 @@ class spectrum_integrator(gr.sync_block):
         nframes = len(in0)
         
         if self.mode == 0:
-            # 更高效的移动平均实现
+            # 使用队列的移动平均实现
             for i in range(nframes):
-                self.buffer[self.buffer_index] = in0[i]
-                self.buffer_index = (self.buffer_index + 1) % self.n_frames
+                current_frame = in0[i].copy()
                 
                 if self.buffer_count < self.n_frames:
-                    self.buffer_count += 1
-                    # 增量更新平均值
-                    if self.buffer_count == 0:
-                        out[i] = in0[i]
-                    else:
-                        out[i] = out[i-1] + (in0[i] - out[i-1]) / self.buffer_count
+                    # 缓冲区未满，增量添加
+                    self.buffer_queue.append(current_frame)
+                    self.current_sum += current_frame
+                    self.buffer_count = len(self.buffer_queue)
+                    out[i] = self.current_sum / self.buffer_count
                 else:
-                    # 缓冲区满，使用滑动窗口平均
-                    out[i] = out[i-1] + (in0[i] - self.buffer[self.buffer_index]) / self.n_frames
+                    # 缓冲区已满，滑动窗口平均
+                    oldest_frame = self.buffer_queue.popleft()
+                    self.buffer_queue.append(current_frame)
+                    
+                    # 更新总和：减去最旧的帧，加上最新的帧
+                    self.current_sum = self.current_sum - oldest_frame + current_frame
+                    out[i] = self.current_sum / self.n_frames
         else:  # IIR模式
             # 使用NumPy的向量化操作
             alpha = self.alpha

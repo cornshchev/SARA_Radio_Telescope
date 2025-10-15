@@ -1,0 +1,14 @@
+<RCC>
+  <qresource prefix="image">
+    <file>img/logo.jpg</file>
+    <file>img/seu-logo-512px.png</file>
+  </qresource>
+  <qresource prefix="icon">
+    <file>icon/icon_seu.svg</file>
+    <file>icon/icon_cali.svg</file>
+    <file>icon/icon_radar.svg</file>
+    <file>icon/icon_signal.svg</file>
+    <file>icon/icon_info.svg</file>
+    <file>icon/icon_save.svg</file>
+  </qresource>
+</RCC>

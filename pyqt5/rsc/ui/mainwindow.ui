@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="locale">
+   <locale language="Chinese" country="China"/>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item row="0" column="1">
+     <widget class="QFrame" name="frame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="baseSize">
+       <size>
+        <width>-12144</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Noto Serif CJK SC Black</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame{
+	background-color: rgb(228, 228, 228);
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_spectrum">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Noto Serif CJK SC</family>
+           <pointsize>12</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">        QPushButton{
+              border-top: 3px outset transparent;
+              border-bottom: 7px outset transparent;
+              border-right: 3px outset transparent;
+              border-left:20px outset transparent;
+				text-align: left;   /* 文本左对齐 */
+
+			  icon-size: 20px;
+
+              background-color: rgb(228, 228, 228);
+        }
+
+
+        /* 鼠标悬停 */
+        QPushButton:hover{
+              background-color: rgb(205, 205, 205);
+        }
+
+        /* 点击和按下 */
+        QTPushButton:pressed,QPushButton:checked{
+              /*border-left: 18px outset rgb(93, 95, 97);*/
+              background-color: rgb(246, 246, 246);
+        }
+
+        QPushButton:default {
+          border-color: navy; /* make the default button prominent */
+        }
+
+</string>
+         </property>
+         <property name="text">
+          <string>谱线观测</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resource.qrc">
+           <normaloff>:/icon/icon/icon_signal.svg</normaloff>:/icon/icon/icon_signal.svg</iconset>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_record">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Noto Serif CJK SC</family>
+           <pointsize>12</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">        QPushButton{
+              border-top: 3px outset transparent;
+              border-bottom: 7px outset transparent;
+              border-right: 3px outset transparent;
+              border-left:20px outset transparent;
+				text-align: left;   /* 文本左对齐 */
+
+			  icon-size: 20px;
+
+              background-color: rgb(228, 228, 228);
+        }
+
+
+        /* 鼠标悬停 */
+        QPushButton:hover{
+              background-color: rgb(205, 205, 205);
+        }
+
+        /* 点击和按下 */
+        QTPushButton:pressed,QPushButton:checked{
+              /*border-left: 18px outset rgb(93, 95, 97);*/
+              background-color: rgb(246, 246, 246);
+        }
+
+        QPushButton:default {
+          border-color: navy; /* make the default button prominent */
+        }
+
+</string>
+         </property>
+         <property name="text">
+          <string>频谱记录</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resource.qrc">
+           <normaloff>:/icon/icon/icon_save.svg</normaloff>:/icon/icon/icon_save.svg</iconset>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_direction">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Noto Serif CJK SC</family>
+           <pointsize>12</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">        QPushButton{
+              border-top: 3px outset transparent;
+              border-bottom: 7px outset transparent;
+              border-right: 3px outset transparent;
+              border-left:20px outset transparent;
+				text-align: left;   /* 文本左对齐 */
+
+			  icon-size: 20px;
+
+              background-color: rgb(228, 228, 228);
+        }
+
+
+        /* 鼠标悬停 */
+        QPushButton:hover{
+              background-color: rgb(205, 205, 205);
+        }
+
+        /* 点击和按下 */
+        QTPushButton:pressed,QPushButton:checked{
+              /*border-left: 18px outset rgb(93, 95, 97);*/
+              background-color: rgb(246, 246, 246);
+        }
+
+        QPushButton:default {
+          border-color: navy; /* make the default button prominent */
+        }
+
+</string>
+         </property>
+         <property name="text">
+          <string>方向设置</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resource.qrc">
+           <normaloff>:/icon/icon/icon_radar.svg</normaloff>:/icon/icon/icon_radar.svg</iconset>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_calibration">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Noto Serif CJK SC</family>
+           <pointsize>12</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">        QPushButton{
+              border-top: 3px outset transparent;
+              border-bottom: 7px outset transparent;
+              border-right: 3px outset transparent;
+              border-left:20px outset transparent;
+				text-align: left;   /* 文本左对齐 */
+
+			  icon-size: 20px;
+
+              background-color: rgb(228, 228, 228);
+        }
+
+
+        /* 鼠标悬停 */
+        QPushButton:hover{
+              background-color: rgb(205, 205, 205);
+        }
+
+        /* 点击和按下 */
+        QTPushButton:pressed,QPushButton:checked{
+              /*border-left: 18px outset rgb(93, 95, 97);*/
+              background-color: rgb(246, 246, 246);
+        }
+
+        QPushButton:default {
+          border-color: navy; /* make the default button prominent */
+        }
+
+</string>
+         </property>
+         <property name="text">
+          <string>系统校准</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resource.qrc">
+           <normaloff>:/icon/icon/icon_cali.svg</normaloff>:/icon/icon/icon_cali.svg</iconset>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_about">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Noto Serif CJK SC</family>
+           <pointsize>12</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">        QPushButton{
+              border-top: 3px outset transparent;
+              border-bottom: 7px outset transparent;
+              border-right: 3px outset transparent;
+              border-left:20px outset transparent;
+				text-align: left;   /* 文本左对齐 */
+
+			  icon-size: 20px;
+
+              background-color: rgb(228, 228, 228);
+        }
+
+
+        /* 鼠标悬停 */
+        QPushButton:hover{
+              background-color: rgb(205, 205, 205);
+        }
+
+        /* 点击和按下 */
+        QTPushButton:pressed,QPushButton:checked{
+              /*border-left: 18px outset rgb(93, 95, 97);*/
+              background-color: rgb(246, 246, 246);
+        }
+
+        QPushButton:default {
+          border-color: navy; /* make the default button prominent */
+        }
+
+</string>
+         </property>
+         <property name="text">
+          <string>关于</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resource.qrc">
+           <normaloff>:/icon/icon/icon_info.svg</normaloff>:/icon/icon/icon_info.svg</iconset>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="logo_seu">
+         <property name="pixmap">
+          <pixmap resource="resource.qrc">:/icon/icon/icon_seu.svg</pixmap>
+         </property>
+         <property name="margin">
+          <number>10</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QStackedWidget" name="stacked_widget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="resource.qrc"/>
+  <include location="resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>
