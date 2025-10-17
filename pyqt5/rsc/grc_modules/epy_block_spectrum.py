@@ -35,9 +35,6 @@ class spectrum_display(gr.sync_block, QtCore.QObject):
         self.cat_ratio = min(1, abs(cat_ratio))
         self.parent = parent
 
-        # self.data_queue = []
-        # self.max_queue_size = 10
-
         self.freq_axis = None  # 预分配频率轴
         self.update_freq_axis()  # 初始化频率轴
         self.frame_count = 0  # 帧计数器
@@ -64,6 +61,13 @@ class spectrum_display(gr.sync_block, QtCore.QObject):
             
             # 添加到父窗口
             self.parent.add_spectrum_widget(self.plot_widget)
+
+
+    def reset_state(self):
+        """重置显示状态"""
+        self.freq_axis = None  # 预分配频率轴
+        self.update_freq_axis()  # 初始化频率轴
+        self.frame_count = 0  # 帧计数器
     
     def work(self, input_items, output_items):
         """处理输入数据"""
@@ -72,13 +76,17 @@ class spectrum_display(gr.sync_block, QtCore.QObject):
         if len(in0) > 0:
             # 获取最新的频谱数据
             spectrum_data = in0[0][self.spectrum_indices]
-            
-            if hasattr(self, 'curve') and self.curve:
-                # 只在必要时发射信号，比如每N帧发射一次
-                if self.frame_count % 10 == 0:  # 每5帧更新一次显示
+            # 检查数据长度是否与频率轴匹配
+            if len(spectrum_data) == len(self.freq_axis):
+                if hasattr(self, 'curve') and self.curve:
+                    # 只在必要时发射信号，比如每N帧发射一次
+                    # if self.frame_count % 10 == 0:  # 每5帧更新一次显示
                     self.update_display_signal.emit(spectrum_data.copy())
-            self.frame_count += 1
-        
+                # self.frame_count += 1
+            else:
+                # 长度不匹配，重新计算频率轴
+                self.vec_length = len(spectrum_data)
+                self.reset_state()
         return len(input_items[0])
     
     @QtCore.pyqtSlot(np.ndarray)
@@ -87,6 +95,7 @@ class spectrum_display(gr.sync_block, QtCore.QObject):
         try:
             if hasattr(self, 'curve') and self.curve:
                 # 使用预分配的频率轴
+                # self.
                 self.curve.setData(self.freq_axis, data)
         except Exception as e:
             print(f"epy_block_spectrum.py更新频谱数据错误: {e}")
@@ -105,3 +114,9 @@ class spectrum_display(gr.sync_block, QtCore.QObject):
             (self.freq + self.samp_rate*self.cat_ratio/2) / 1e6,
             end_idx - start_idx
         )
+
+    def set_vector_length(self, vec_length):
+        """设置向量长度"""
+        self.vec_length = vec_length
+        self.reset_state()
+            

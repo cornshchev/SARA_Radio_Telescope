@@ -27,6 +27,7 @@ from gnuradio.filter import pfb
 from .epy_block_integration import spectrum_integrator as spectrum_integration_block  # embedded python block
 from .epy_block_spectrum import spectrum_display as spectrum_display_block  # embedded python block
 from .epy_block_histogram import histogram_display as histogram_display_block  # embedded python block
+from .epy_block_recording import stream_recorder as stream_recorder_block  # embedded python block
 
 import numpy
 import osmosdr
@@ -49,7 +50,7 @@ class RadioTelescope1420(gr.top_block):
         
         # 保存UI引用
         self.ui = ui
-        self.ui.main_block = self
+        self.ui.gr_block = self
         
         ##################################################
         # Variables
@@ -59,19 +60,20 @@ class RadioTelescope1420(gr.top_block):
         self.samp_rate = samp_rate = 3000000
         self.rf_gain = rf_gain = 10
         self.integration_time = integration_time = 5
-        self.integration_mode = integration_mode = 0
+        # self.integration_mode = integration_mode = 0
         self.freq_corr = freq_corr = 0
         self.freq = freq = source_freq
         self.decimation = decimation = 8
         self.db_enabled = db_enabled = True
         self.calibration_mode = calibration_mode = 0
         self.samples = samples = 4096
+        self.file_path = file_path = ""
+        # self.file_name = file_name = "spectrum"
 
         ##################################################
         # Blocks
         ##################################################
 
-        # 创建图像显示控件并添加到UI中
         # histogram sink
         self.qtgui_histogram_sink_x_0 = qtgui.histogram_sink_f(
             (int(samp_rate/8)),
@@ -94,7 +96,7 @@ class RadioTelescope1420(gr.top_block):
 
         # self.qtgui_histogram_sink_x_0 = histogram_display_block(bins=256, samples_need=samples, x0=0, x1=0.5, parent=ui)
 
-        # waterfall sink
+        # 瀑布图显示
         self.qtgui_waterfall_sink_x_0 = qtgui.waterfall_sink_c(
             4096,
             window.WIN_BLACKMAN_hARRIS,
@@ -128,6 +130,7 @@ class RadioTelescope1420(gr.top_block):
             False)
         self.pfb_decimator_ccf_0.declare_sample_delay(0)
         
+        # Osmocom SDR源块
         self.osmosdr_source_0 = osmosdr.source(
             args="numchan=" + str(1) + " " + "airspy=0"
         )
@@ -144,11 +147,12 @@ class RadioTelescope1420(gr.top_block):
         self.osmosdr_source_0.set_antenna('', 0)
         self.osmosdr_source_0.set_bandwidth(0, 0)
         
+
+        # FFT块
         self.fft_vxx_0 = fft.fft_vcc(vec_length, True, window.rectangular(vec_length), True, 4)
         
-        self.spectrum_integration_block = spectrum_integration_block(vec_length=vec_length, integration_time=integration_time, mode=integration_mode, samp_rate=samp_rate/4)
-        
-        self.blocks_vector_to_stream_0 = blocks.vector_to_stream(gr.sizeof_float*1, vec_length)
+        self.spectrum_integration_block = spectrum_integration_block(vec_length=vec_length, integration_time=integration_time, samp_rate=samp_rate/decimation)
+        self.stream_recorder_block = stream_recorder_block(file_path="/tmp", samp_rate=samp_rate/decimation, max_length=1048576, data_type="complex")
         self.blocks_stream_to_vector_0_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, vec_length)
         self.blocks_selector_0 = blocks.selector(gr.sizeof_float*vec_length,db_enabled,0)
         self.blocks_selector_0.set_enabled(True)
@@ -165,6 +169,7 @@ class RadioTelescope1420(gr.top_block):
         self.connect((self.blocks_complex_to_mag_0, 0), (self.qtgui_histogram_sink_x_0, 0))
         self.connect((self.blocks_complex_to_mag_squared_0, 0), (self.spectrum_integration_block, 0))
         self.connect((self.blocks_nlog10_ff_0, 0), (self.blocks_selector_0, 1))
+        self.connect((self.pfb_decimator_ccf_0, 0), (self.stream_recorder_block, 0))
         # self.connect((self.blocks_selector_0, 0), (self.blocks_vector_to_stream_0, 0))
         # self.connect((self.blocks_selector_0, 0), (self.qtgui_vector_sink_f_0_0_1_0, 0))
         self.connect((self.blocks_stream_to_vector_0_0, 0), (self.fft_vxx_0, 0))
@@ -190,13 +195,6 @@ class RadioTelescope1420(gr.top_block):
     def get_vec_length(self):
         return self.vec_length
 
-    def set_vec_length(self, vec_length):
-        self.vec_length = vec_length
-        self.spectrum_integration_block.vec_length = self.vec_length
-        self.spectrum_display_block.vec_length = self.vec_length
-        # self.spectrum_display_block.x_axis_step_value = (self.samp_rate/self.decimation/self.vec_length)/1e6
-        self.fft_vxx_0.set_window(window.rectangular(self.vec_length))
-        # self.qtgui_vector_sink_f_0_0_1_0.set_x_axis(((self.freq-self.samp_rate/self.decimation/2)/1e6), ((self.samp_rate/self.decimation/self.vec_length)/1e6))
 
     def get_samp_rate(self):
         return self.samp_rate
@@ -205,7 +203,7 @@ class RadioTelescope1420(gr.top_block):
         self.samp_rate = samp_rate
         self.spectrum_integration_block.samp_rate = self.samp_rate/self.decimation
         self.spectrum_display_block.samp_rate(self.samp_rate/self.decimation)
-        # self.spectrum_display_block.x_axis_step_value = (self.samp_rate/self.decimation/self.vec_length)/1e6
+        self.stream_recorder_block.set_samp_rate(self.samp_rate/self.decimation)
         self.osmosdr_source_0.set_sample_rate(self.samp_rate)
         # self.qtgui_vector_sink_f_0_0_1_0.set_x_axis(((self.freq-self.samp_rate/self.decimation/2)/1e6), ((self.samp_rate/self.decimation/self.vec_length)/1e6))
         self.qtgui_waterfall_sink_x_0.set_frequency_range(self.freq, self.samp_rate)
@@ -222,15 +220,14 @@ class RadioTelescope1420(gr.top_block):
 
     def set_integration_time(self, integration_time):
         self.integration_time = integration_time
-        self.spectrum_integration_block.integration_time = self.integration_time
+        self.spectrum_integration_block.set_integration_time(self.integration_time)
 
-    def get_integration_mode(self):
-        return self.integration_mode
+    def set_vector_length(self, vec_length):
+        self.vec_length = vec_length
+        self.fft_vxx_0.set_window(window.rectangular(self.vec_length))
+        self.spectrum_integration_block.set_vector_length(self.vec_length)
+        self.spectrum_display_block.set_vector_length(self.vec_length)
 
-    def set_integration_mode(self, integration_mode):
-        self.integration_mode = integration_mode
-        # self._integration_mode_callback(self.integration_mode)
-        self.spectrum_integration_block.mode = self.integration_mode
 
     def get_freq_corr(self):
         return self.freq_corr

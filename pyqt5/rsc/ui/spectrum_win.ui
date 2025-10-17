@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>main_win</class>
- <widget class="QWidget" name="main_win">
+ <class>spectrum_page</class>
+ <widget class="QWidget" name="spectrum_page">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -73,7 +73,7 @@
          <property name="title">
           <string>积分设置</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,0,0">
+         <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,0,0,0">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
@@ -115,20 +115,56 @@
            </layout>
           </item>
           <item>
-           <widget class="QRadioButton" name="radio_movingaverage">
-            <property name="text">
-             <string>滑动平均</string>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
             </property>
-            <property name="checked">
-             <bool>true</bool>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>FFT点数</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="radio_iiraverage">
-            <property name="text">
-             <string>IIR 滤波</string>
-            </property>
+           <widget class="QComboBox" name="combo_fftlength">
+            <item>
+             <property name="text">
+              <string>1024</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2048</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>4096</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>8192</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>
@@ -319,14 +355,14 @@
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>40</height>
+            <height>30</height>
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
+           <enum>QFrame::NoFrame</enum>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;信号直方图&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;信号直方图&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>

@@ -245,12 +245,15 @@ if __name__ == "__main__":
     # 在实际使用中，你可以替换为你的实际UI页面
     try:
         from spectrum_page import Ui_spectrum_page
+        from record_page import Ui_record_page
         
         spectrum_widget = QtWidgets.QWidget()
         ui_spectrum = Ui_spectrum_page()
         ui_spectrum.setupUi(spectrum_widget)
         
         record_page = QtWidgets.QWidget()
+        ui_record = Ui_record_page()
+        ui_record.setupUi(record_page)
         direction_page = QtWidgets.QWidget()
         calibration_page = QtWidgets.QWidget()
         about_page = QtWidgets.QWidget()

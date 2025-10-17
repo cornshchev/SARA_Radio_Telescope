@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>main_win</class>
- <widget class="QWidget" name="main_win">
+ <class>spectrum_page</class>
+ <widget class="QWidget" name="spectrum_page">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -26,42 +26,56 @@
   <property name="locale">
    <locale language="Chinese" country="China"/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
+  <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,4,4,5">
+    <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,3,4,3">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <widget class="QGroupBox" name="groupbox_cali">
-         <property name="title">
-          <string>校准选项</string>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QGroupBox" name="groupbox_cali">
+           <property name="title">
+            <string>校准选项</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QRadioButton" name="radio_calioff">
+              <property name="text">
+               <string>校准关闭</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="radio_dynamiccali">
+              <property name="text">
+               <string>动态校准</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="radio_staticcali">
+              <property name="text">
+               <string>文件校准</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QPushButton" name="button_toggle">
+         <property name="text">
+          <string>启动</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="QRadioButton" name="radio_calioff">
-            <property name="text">
-             <string>校准关闭</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="radio_dynamiccali">
-            <property name="text">
-             <string>动态校准</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="radio_staticcali">
-            <property name="text">
-             <string>文件校准</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>
@@ -73,7 +87,7 @@
          <property name="title">
           <string>积分设置</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,0,0">
+         <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,0,0,0">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
@@ -115,20 +129,56 @@
            </layout>
           </item>
           <item>
-           <widget class="QRadioButton" name="radio_movingaverage">
-            <property name="text">
-             <string>滑动平均</string>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
             </property>
-            <property name="checked">
-             <bool>true</bool>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>FFT点数</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="radio_iiraverage">
-            <property name="text">
-             <string>IIR 滤波</string>
-            </property>
+           <widget class="QComboBox" name="combo_veclength">
+            <item>
+             <property name="text">
+              <string>1024</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2048</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>4096</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>8192</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>
@@ -319,11 +369,14 @@
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>40</height>
+            <height>30</height>
            </size>
           </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;信号直方图&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -340,7 +393,7 @@
    <item>
     <widget class="QFrame" name="frame_2">
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -398,7 +451,7 @@
    <item>
     <widget class="QFrame" name="frame">
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -461,9 +514,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="resource.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>spinbox_gain</sender>
@@ -472,12 +523,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1025</x>
-     <y>166</y>
+     <x>754</x>
+     <y>153</y>
     </hint>
     <hint type="destinationlabel">
-     <x>942</x>
-     <y>161</y>
+     <x>667</x>
+     <y>147</y>
     </hint>
    </hints>
   </connection>
@@ -488,12 +539,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1025</x>
-     <y>114</y>
+     <x>754</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
-     <x>923</x>
-     <y>109</y>
+     <x>652</x>
+     <y>79</y>
     </hint>
    </hints>
   </connection>
@@ -504,12 +555,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>923</x>
-     <y>109</y>
+     <x>652</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1025</x>
-     <y>114</y>
+     <x>754</x>
+     <y>85</y>
     </hint>
    </hints>
   </connection>
@@ -520,12 +571,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>942</x>
-     <y>161</y>
+     <x>667</x>
+     <y>147</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1025</x>
-     <y>166</y>
+     <x>754</x>
+     <y>153</y>
     </hint>
    </hints>
   </connection>
@@ -536,12 +587,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>644</x>
-     <y>118</y>
+     <x>378</x>
+     <y>101</y>
     </hint>
     <hint type="destinationlabel">
-     <x>503</x>
-     <y>126</y>
+     <x>331</x>
+     <y>96</y>
     </hint>
    </hints>
   </connection>
@@ -552,12 +603,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>586</x>
-     <y>127</y>
+     <x>331</x>
+     <y>96</y>
     </hint>
     <hint type="destinationlabel">
-     <x>635</x>
-     <y>126</y>
+     <x>378</x>
+     <y>101</y>
     </hint>
    </hints>
   </connection>

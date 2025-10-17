@@ -19,6 +19,7 @@ import time
 import threading
 import os
 from pathlib import Path
+import pmt
 
 project_root = Path(__file__).parent
 sys.path.append(str(project_root))
@@ -28,6 +29,7 @@ from grc_modules.grc_blocks import RadioTelescope1420
 try:
     from ui.main_window import Ui_MainWindow
     from ui.spectrum_page import Ui_spectrum_page
+    from ui.record_page import Ui_record_page
 except ImportError as e:
     print(f"main.py导入错误: {e}")
     print("请确保所有依赖的UI文件都存在")
@@ -51,17 +53,19 @@ class RadioTelescopeUI(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         try:     
-            spectrum_widget = QtWidgets.QWidget()
+            spectrum_page = QtWidgets.QWidget()
             self.ui_spectrum = Ui_spectrum_page()
-            self.ui_spectrum.setupUi(spectrum_widget)
+            self.ui_spectrum.setupUi(spectrum_page)
             
             record_page = QtWidgets.QWidget()
+            self.ui_record = Ui_record_page()
+            self.ui_record.setupUi(record_page)
             direction_page = QtWidgets.QWidget()
             calibration_page = QtWidgets.QWidget()
             about_page = QtWidgets.QWidget()
             
             # 设置页面到stacked_widget
-            self.ui.add_external_ui(spectrum_widget, 0)
+            self.ui.add_external_ui(spectrum_page, 0)
             self.ui.add_external_ui(record_page, 1)
             self.ui.add_external_ui(direction_page, 2)
             self.ui.add_external_ui(calibration_page, 3)
@@ -75,9 +79,9 @@ class RadioTelescopeUI(QtWidgets.QMainWindow):
             print("请确保所有依赖的UI文件都存在")
         
         # 存储UI中的控件引用
-        self.histogram_widget = spectrum_widget.findChild(QtWidgets.QWidget, "widget_histogram")
-        self.waterfall_widget = spectrum_widget.findChild(QtWidgets.QWidget, "widget_waterfall")
-        self.spectrum_widget = spectrum_widget.findChild(QtWidgets.QWidget, "widget_integration")
+        self.histogram_widget = spectrum_page.findChild(QtWidgets.QWidget, "widget_histogram")
+        self.waterfall_widget = spectrum_page.findChild(QtWidgets.QWidget, "widget_waterfall")
+        self.spectrum_widget = spectrum_page.findChild(QtWidgets.QWidget, "widget_integration")
         
         # 初始化控件引用
         # 连接信号和槽
@@ -85,6 +89,9 @@ class RadioTelescopeUI(QtWidgets.QMainWindow):
     
     def setup_connections(self):
         # 连接UI控件的信号到对应的槽函数
+
+        #################################################################################################################
+        # ui_spectrum控件
         self.ui_spectrum.slider_freq.valueChanged.connect(self.on_freq_changed)
         self.ui_spectrum.spinbox_freq.valueChanged.connect(self.on_freq_changed)
         self.ui_spectrum.slider_gain.valueChanged.connect(self.on_gain_changed)
@@ -93,55 +100,123 @@ class RadioTelescopeUI(QtWidgets.QMainWindow):
         self.ui_spectrum.spinbox_integration.valueChanged.connect(self.on_integration_time_changed)
         self.ui_spectrum.spinbox_freqcorr.valueChanged.connect(self.on_freq_corr_changed)
         self.ui_spectrum.checkbox_enabledb.stateChanged.connect(self.on_db_enabled_changed)
-        self.ui_spectrum.radio_movingaverage.toggled.connect(self.on_integration_mode_changed)
-        self.ui_spectrum.radio_iiraverage.toggled.connect(self.on_integration_mode_changed)
+        self.ui_spectrum.combo_veclength.currentIndexChanged.connect(self.on_vector_length_changed)
+        # self.ui_spectrum.radio_movingaverage.toggled.connect(self.on_integration_mode_changed)
+        # self.ui_spectrum.radio_iiraverage.toggled.connect(self.on_integration_mode_changed)
         self.ui_spectrum.radio_calioff.toggled.connect(self.on_calibration_mode_changed)
         self.ui_spectrum.radio_staticcali.toggled.connect(self.on_calibration_mode_changed)
         self.ui_spectrum.radio_dynamiccali.toggled.connect(self.on_calibration_mode_changed)
-        # self.ui_spectrum.button_save.clicked.connect(self.on_save_spectrum)
+        self.ui_spectrum.button_toggle.clicked.connect(self.on_toggle_action)
+
+        #################################################################################################################
+        # ui_record控件
+        self.ui_record.button_recording.clicked.connect(self.on_start_recording)
+        self.ui_record.button_browse.clicked.connect(self.on_browse_file)
+        self.ui_record.lineEdit_filepath.textChanged.connect(self.update_file_path)
+
+        #################################################################################################################
+    # ui.spectrum槽函数定义
+    def on_toggle_action(self):
+        # 启动/停止按钮
+        if hasattr(self, 'gr_block'):
+            if self.ui_spectrum.button_toggle.isChecked():
+                self.ui_spectrum.button_toggle.setText("停止")
+                
+                # 定时器用于处理Python信号
+                timer = QtCore.QTimer()
+                timer.start(500)
+                timer.timeout.connect(lambda: None)
+
+            else:
+                self.ui_spectrum.button_toggle.setText("启动")
+                self.gr_block.stop()
+                self.gr_block.wait()
     
     def on_freq_changed(self, value):
         # 频率改变信号
-        if hasattr(self, 'main_block'):
-            self.main_block.set_freq(value)
+        if hasattr(self, 'gr_block'):
+            self.gr_block.set_freq(value)
     
     def on_gain_changed(self, value):
         # 增益改变信号
-        if hasattr(self, 'main_block'):
-            self.main_block.set_rf_gain(value)
+        if hasattr(self, 'gr_block'):
+            self.gr_block.set_rf_gain(value)
     
     def on_integration_time_changed(self, value):
         # 积分时间改变信号
-        if hasattr(self, 'main_block'):
-            self.main_block.set_integration_time(value)
+        if hasattr(self, 'gr_block'):
+            self.gr_block.set_integration_time(value)
     
     def on_freq_corr_changed(self, value):
         # 频率校正改变信号
-        if hasattr(self, 'main_block'):
-            self.main_block.set_freq_corr(value)
+        if hasattr(self, 'gr_block'):
+            self.gr_block.set_freq_corr(value)
     
     def on_db_enabled_changed(self, state):
         # dB模式改变信号
-        if hasattr(self, 'main_block'):
-            self.main_block.set_db_enabled(state == QtCore.Qt.Checked)
+        if hasattr(self, 'gr_block'):
+            self.gr_block.set_db_enabled(state == QtCore.Qt.Checked)
+
+    def on_vector_length_changed(self, index):
+        # 向量长度改变信号
+        vec_length = int(self.ui_spectrum.combo_veclength.currentText())
+        if hasattr(self, 'gr_block'):
+            self.gr_block.set_vector_length(vec_length)
     
-    def on_integration_mode_changed(self, checked):
-        # 积分模式改变信号
-        if checked and hasattr(self, 'main_block'):
-            if self.radio_movingaverage.isChecked():
-                self.main_block.set_integration_mode(0)
-            elif self.radio_iiraverage.isChecked():
-                self.main_block.set_integration_mode(1)
     
     def on_calibration_mode_changed(self, checked):
         # 校准模式改变信号
-        if checked and hasattr(self, 'main_block'):
+        if checked and hasattr(self, 'gr_block'):
             if self.radio_calioff.isChecked():
-                self.main_block.set_calibration_mode(0)
+                self.gr_block.set_calibration_mode(0)
             elif self.radio_staticcali.isChecked():
-                self.main_block.set_calibration_mode(1)
+                self.gr_block.set_calibration_mode(1)
             elif self.radio_dynamiccali.isChecked():
-                self.main_block.set_calibration_mode(2)
+                self.gr_block.set_calibration_mode(2)
+
+    #################################################################################################################
+    # ui.record槽函数定义
+    def on_start_recording(self):
+        # 开始录制按钮
+        if hasattr(self, 'gr_block'):
+            """切换录制状态"""
+            if self.ui_record.button_recording.isChecked():
+                self.ui_record.button_recording.setText("停止记录")
+                self.gr_block.stream_recorder_block.set_recording_state(True)
+            else:
+                self.ui_record.button_recording.setText("开始记录")
+                self.gr_block.stream_recorder_block.set_recording_state(False)
+
+    def on_browse_file(self):
+        # 浏览文件保存位置（目录）
+        options = QtWidgets.QFileDialog.Options()
+        options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        directory = QtWidgets.QFileDialog.getExistingDirectory(
+            self, 
+            "选择保存位置", 
+            "",  # 默认路径
+            options=options
+        )
+        if directory:
+            self.ui_record.lineEdit_filepath.setText(directory)
+            if hasattr(self, 'gr_block'):
+                self.gr_block.stream_recorder_block.set_file_path(directory)
+
+    def start_recording(self):
+        """发送开始录制消息"""
+        msg = pmt.from_bool(True)
+        self.gr_block.message_port_pub(pmt.intern("recording_control"), msg)
+    
+    def stop_recording(self):
+        """发送停止录制消息"""
+        msg = pmt.from_bool(False)
+        self.gr_block.message_port_pub(pmt.intern("recording_control"), msg)
+
+    def update_file_path(self, path):
+        """更新文件保存路径"""
+        self.gr_block.file_path = path
+    
+    #################################################################################################################
     
 
     def add_histogram_widget(self, widget):
@@ -158,9 +233,9 @@ class RadioTelescopeUI(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):
         """重写关闭事件，确保GNU Radio块正确停止"""
-        if self.main_block:
-            self.main_block.stop()
-            self.main_block.wait()
+        if self.gr_block:
+            self.gr_block.stop()
+            self.gr_block.wait()
         event.accept()
 
 
@@ -185,13 +260,13 @@ def main(top_block_cls=RadioTelescope1420, options=None):
         return 1
     
     # 创建GNU Radio主块
-    try:
-        tb = RadioTelescope1420(ui=ui)
-        # ui.set_main_block(tb)
-    except Exception as e:
-        print(f"main.py创建GNU Radio块错误: {e}")
-        QtWidgets.QMessageBox.critical(None, "错误", f"无法初始化无线电接收器: {e}")
-        return 1
+    # try:
+    tb = RadioTelescope1420(ui=ui)
+        # ui.set_gr_block(tb)
+    # except Exception as e:
+    #     print(f"main.py创建GNU Radio块错误: {e}")
+    #     QtWidgets.QMessageBox.critical(None, "错误", f"无法初始化无线电接收器: {e}")
+    #     return 1
     
     # 显示窗口
     ui.show()
