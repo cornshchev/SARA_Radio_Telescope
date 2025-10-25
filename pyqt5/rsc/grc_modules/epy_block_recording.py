@@ -19,7 +19,7 @@ class stream_recorder(gr.sync_block):
     通过外部控制信号控制记录起停
     """
     
-    def __init__(self, file_path="/tmp", samp_rate=1e6, max_length=32768, data_type="complex"):
+    def __init__(self, file_path="./", file_name="td_record", samp_rate=1e6, freq=300000, max_length=32768, data_type="complex"):
         gr.sync_block.__init__(
             self,
             name="Time Domain Recorder",
@@ -30,6 +30,7 @@ class stream_recorder(gr.sync_block):
         # 参数初始化
         self.file_path = file_path
         self.samp_rate = samp_rate
+        self.freq = freq
         self.max_length = max_length
         self.data_type = data_type
         
@@ -38,7 +39,8 @@ class stream_recorder(gr.sync_block):
         self.current_file = None
         self.current_length = 0
         self.file_start_time = None
-        self.filename = ""
+        self.filename = file_name
+        self.filefullname = ""
         
         # 创建保存目录
         os.makedirs(self.file_path, exist_ok=True)
@@ -73,8 +75,8 @@ class stream_recorder(gr.sync_block):
             
         # 生成唯一文件名
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-        self.filename = f"td_record_{timestamp}.bin"
-        file_full_path = os.path.join(self.file_path, self.filename)
+        self.filefullname = f"{self.filename}_{timestamp}.bin"
+        file_full_path = os.path.join(self.file_path, self.filefullname)
         
         self.current_file = open(file_full_path, 'wb')
         self.current_length = 0
@@ -89,7 +91,7 @@ class stream_recorder(gr.sync_block):
         if not self.filename:
             return
             
-        file_full_path = os.path.join(self.file_path, self.filename)
+        file_full_path = os.path.join(self.file_path, self.filefullname)
         
         # 读取文件内容
         with open(file_full_path, 'rb') as f:
@@ -98,6 +100,7 @@ class stream_recorder(gr.sync_block):
         # 构建文件头信息
         header_info = {
             'sampling_rate': self.samp_rate,
+            'frequency': self.freq,
             'data_length': self.current_length,
             'data_type': self.data_type,
             'start_time': self.file_start_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
@@ -108,6 +111,7 @@ class stream_recorder(gr.sync_block):
         header_str = (
             f"GNU Radio Time Domain Recorder\n"
             f"Sampling Rate: {header_info['sampling_rate']} Hz\n"
+            f"Frequency: {header_info['frequency']} Hz\n"
             f"Data Length: {header_info['data_length']} samples\n"
             f"Data Type: {header_info['data_type']}\n"
             f"Start Time: {header_info['start_time']}\n"
@@ -135,15 +139,34 @@ class stream_recorder(gr.sync_block):
         
         # 如果正在记录，保存数据
         if self.recording and self.current_file:
-            # 转换为字节并写入
-            data_bytes = in0.tobytes()
-            self.current_file.write(data_bytes)
-            self.current_length += n_samples
-            
-            # 检查是否达到最大长度，需要创建新文件
-            if self.current_length >= self.max_length:
+            if n_samples == self.max_length - self.current_length:
+                data_bytes = in0[:self.max_length - self.current_length].tobytes()
+                self.current_file.write(data_bytes)
+                self.current_length += (self.max_length - self.current_length)
                 self.stop_recording()
                 self.start_recording()  # 自动开始新文件记录
+            elif n_samples > self.max_length - self.current_length:
+                data_bytes = in0[:self.max_length - self.current_length].tobytes()
+                self.current_file.write(data_bytes)
+                self.current_length += (self.max_length - self.current_length)
+                remaining_samples = n_samples - (self.max_length - self.current_length)
+                self.stop_recording()
+                self.start_recording()  # 自动开始新文件记录
+                
+                # 处理剩余数据
+                data_bytes = in0[-remaining_samples:].tobytes()
+                self.current_file.write(data_bytes)
+                self.current_length += remaining_samples
+            else:
+                # 转换为字节并写入
+                data_bytes = in0.tobytes()
+                self.current_file.write(data_bytes)
+                self.current_length += n_samples
+            
+            # 检查是否达到最大长度，需要创建新文件
+            # if self.current_length >= self.max_length:
+            #     self.stop_recording()
+            #     self.start_recording()  # 自动开始新文件记录
                 
         return n_samples
 
@@ -158,11 +181,23 @@ class stream_recorder(gr.sync_block):
         """设置文件路径"""
         self.file_path = file_path
         os.makedirs(self.file_path, exist_ok=True)
+
+    def set_file_name(self, file_name):
+        """设置文件名前缀"""
+        self.filename = file_name
         
     def set_samp_rate(self, samp_rate):
         """设置采样率"""
         self.samp_rate = samp_rate
+
+    def set_freq(self, freq):
+        """设置频率"""
+        self.freq = freq
         
     def set_max_length(self, max_length):
         """设置最大长度"""
         self.max_length = max_length
+
+    def set_file_name(self, filename):
+        """设置文件名前缀"""
+        self.filename = filename

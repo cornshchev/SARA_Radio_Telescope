@@ -52,7 +52,7 @@ class spectrum_display(gr.sync_block, QtCore.QObject):
             self.plot_widget = pg.PlotWidget()
             self.plot_widget.setWindowTitle("平均功率谱")
             self.plot_widget.setBackground('#f0f0f0')
-            self.plot_widget.setLabel('left', '功率', 'dB')
+            self.plot_widget.setLabel('left', '功率密度', 'dB/Hz')
             self.plot_widget.setLabel('bottom', '频率', 'MHz')
             self.plot_widget.showGrid(True, True)
             

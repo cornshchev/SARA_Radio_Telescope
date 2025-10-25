@@ -92,6 +92,7 @@ class RadioTelescopeUI(QtWidgets.QMainWindow):
 
         #################################################################################################################
         # ui_spectrum控件
+        #################################################################################################################
         self.ui_spectrum.slider_freq.valueChanged.connect(self.on_freq_changed)
         self.ui_spectrum.spinbox_freq.valueChanged.connect(self.on_freq_changed)
         self.ui_spectrum.slider_gain.valueChanged.connect(self.on_gain_changed)
@@ -113,19 +114,20 @@ class RadioTelescopeUI(QtWidgets.QMainWindow):
         self.ui_record.button_recording.clicked.connect(self.on_start_recording)
         self.ui_record.button_browse.clicked.connect(self.on_browse_file)
         self.ui_record.lineEdit_filepath.textChanged.connect(self.update_file_path)
+        self.ui_record.lineEdit_filename.textChanged.connect(self.update_file_name)
+        self.ui_record.lineEdit_filename.setText("td_record")
+        # self.ui_record.list_record.
 
-        #################################################################################################################
+    #################################################################################################################
     # ui.spectrum槽函数定义
+    #################################################################################################################
     def on_toggle_action(self):
         # 启动/停止按钮
         if hasattr(self, 'gr_block'):
             if self.ui_spectrum.button_toggle.isChecked():
                 self.ui_spectrum.button_toggle.setText("停止")
+                self.gr_block.start()
                 
-                # 定时器用于处理Python信号
-                timer = QtCore.QTimer()
-                timer.start(500)
-                timer.timeout.connect(lambda: None)
 
             else:
                 self.ui_spectrum.button_toggle.setText("启动")
@@ -159,9 +161,10 @@ class RadioTelescopeUI(QtWidgets.QMainWindow):
 
     def on_vector_length_changed(self, index):
         # 向量长度改变信号
-        vec_length = int(self.ui_spectrum.combo_veclength.currentText())
-        if hasattr(self, 'gr_block'):
-            self.gr_block.set_vector_length(vec_length)
+        pass
+        # vec_length = int(self.ui_spectrum.combo_veclength.currentText())
+        # if hasattr(self, 'gr_block'):
+        #     self.gr_block.set_vector_length(vec_length)
     
     
     def on_calibration_mode_changed(self, checked):
@@ -176,6 +179,7 @@ class RadioTelescopeUI(QtWidgets.QMainWindow):
 
     #################################################################################################################
     # ui.record槽函数定义
+    #################################################################################################################
     def on_start_recording(self):
         # 开始录制按钮
         if hasattr(self, 'gr_block'):
@@ -200,21 +204,27 @@ class RadioTelescopeUI(QtWidgets.QMainWindow):
         if directory:
             self.ui_record.lineEdit_filepath.setText(directory)
             if hasattr(self, 'gr_block'):
-                self.gr_block.stream_recorder_block.set_file_path(directory)
+                self.update_file_path(directory)
 
-    def start_recording(self):
-        """发送开始录制消息"""
-        msg = pmt.from_bool(True)
-        self.gr_block.message_port_pub(pmt.intern("recording_control"), msg)
+    # def start_recording(self):
+    #     """发送开始录制消息"""
+    #     msg = pmt.from_bool(True)
+    #     self.gr_block.message_port_pub(pmt.intern("recording_control"), msg)
     
-    def stop_recording(self):
-        """发送停止录制消息"""
-        msg = pmt.from_bool(False)
-        self.gr_block.message_port_pub(pmt.intern("recording_control"), msg)
+    # def stop_recording(self):
+    #     """发送停止录制消息"""
+    #     msg = pmt.from_bool(False)
+    #     self.gr_block.message_port_pub(pmt.intern("recording_control"), msg)
 
     def update_file_path(self, path):
-        """更新文件保存路径"""
-        self.gr_block.file_path = path
+        # 更新文件保存路径
+        if hasattr(self, 'gr_block'):
+            self.gr_block.set_file_path(path)
+
+    def update_file_name(self, filename):
+        # 更新文件名前缀
+        if hasattr(self, 'gr_block'):
+            self.gr_block.set_file_name(filename)
     
     #################################################################################################################
     

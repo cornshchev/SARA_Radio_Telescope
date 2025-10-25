@@ -56,19 +56,19 @@ class RadioTelescope1420(gr.top_block):
         # Variables
         ##################################################
         self.source_freq = source_freq = 1420400000
-        self.vec_length = vec_length = 4096
+        self.vec_length = vec_length = 2048
         self.samp_rate = samp_rate = 3000000
         self.rf_gain = rf_gain = 10
         self.integration_time = integration_time = 5
         # self.integration_mode = integration_mode = 0
         self.freq_corr = freq_corr = 0
         self.freq = freq = source_freq
-        self.decimation = decimation = 8
+        self.decimation = decimation = 4
         self.db_enabled = db_enabled = True
         self.calibration_mode = calibration_mode = 0
         self.samples = samples = 4096
         self.file_path = file_path = ""
-        # self.file_name = file_name = "spectrum"
+        self.max_length = max_length = int(1048576*16)  # 8*16 MB
 
         ##################################################
         # Blocks
@@ -102,7 +102,7 @@ class RadioTelescope1420(gr.top_block):
             window.WIN_BLACKMAN_hARRIS,
             freq,
             samp_rate,
-            "频谱瀑布图",
+            "",
             1,
             None
         )
@@ -115,12 +115,21 @@ class RadioTelescope1420(gr.top_block):
         waterfall_win.show()
 
         # 频谱显示
-        self.spectrum_display_block = spectrum_display_block(vec_length=vec_length, freq=freq, samp_rate=samp_rate/decimation, cat_ratio=0.8, parent=ui)
+        self.spectrum_display_block = spectrum_display_block(vec_length=vec_length, freq=freq, samp_rate=samp_rate/decimation, cat_ratio=0.85, parent=ui)
         
 
         # 多相抽样滤波器
-        file_path = os.fspath(Path(__file__).resolve().parent / "ph_decimator_taps.csv")
-        taps = np.loadtxt(file_path, delimiter=',')
+        if self.decimation == 8:
+            self.taps_path = os.fspath(Path(__file__).resolve().parent / "ph_decimator_by8_taps.csv")
+        elif self.decimation == 4:
+            self.taps_path = os.fspath(Path(__file__).resolve().parent / "ph_decimator_by4_taps.csv")
+        elif self.decimation == 2:
+            self.taps_path = os.fspath(Path(__file__).resolve().parent / "ph_decimator_by2_taps.csv")
+        else:
+            raise ValueError("Unsupported decimation factor. Supported values are 2, 4, and 8.")
+
+
+        taps = np.loadtxt(self.taps_path, delimiter=',')
         self.pfb_decimator_ccf_0 = pfb.decimator_ccf(
             decimation,
             taps,
@@ -152,7 +161,7 @@ class RadioTelescope1420(gr.top_block):
         self.fft_vxx_0 = fft.fft_vcc(vec_length, True, window.rectangular(vec_length), True, 4)
         
         self.spectrum_integration_block = spectrum_integration_block(vec_length=vec_length, integration_time=integration_time, samp_rate=samp_rate/decimation)
-        self.stream_recorder_block = stream_recorder_block(file_path="/tmp", samp_rate=samp_rate/decimation, max_length=1048576, data_type="complex")
+        self.stream_recorder_block = stream_recorder_block(file_path="./", samp_rate=samp_rate/decimation, freq=freq, max_length=max_length, data_type="complex")
         self.blocks_stream_to_vector_0_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, vec_length)
         self.blocks_selector_0 = blocks.selector(gr.sizeof_float*vec_length,db_enabled,0)
         self.blocks_selector_0.set_enabled(True)
@@ -244,7 +253,7 @@ class RadioTelescope1420(gr.top_block):
         self.spectrum_display_block.freq = self.freq
         self.spectrum_display_block.update_freq_axis()
         self.osmosdr_source_0.set_center_freq(self.freq, 0)
-        # self.qtgui_vector_sink_f_0_0_1_0.set_x_axis(((self.freq-self.samp_rate/self.decimation/2)/1e6), ((self.samp_rate/self.decimation/self.vec_length)/1e6))
+        self.stream_recorder_block.set_freq(self.freq)
         self.qtgui_waterfall_sink_x_0.set_frequency_range(self.freq, self.samp_rate)
 
     def get_decimation(self):
@@ -277,4 +286,13 @@ class RadioTelescope1420(gr.top_block):
     def set_samples(self, samples):
         self.samples = samples
         self.qtgui_histogram_sink_x_0.set_bins(self.samples)
+
+    def set_file_path(self, file_path):
+        """设置文件保存路径"""
+        self.file_path = file_path
+        self.stream_recorder_block.set_file_path(self.file_path)
+
+    def set_file_name(self, file_name):
+        """设置文件名前缀"""
+        self.stream_recorder_block.set_file_name(file_name)
 
